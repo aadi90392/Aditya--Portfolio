@@ -1,7 +1,7 @@
 "use client";
 import { useState, MouseEvent } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ExternalLink, Github, X, ChevronRight, Sparkles, Lock, Code2, Cpu, Zap, Layout } from "lucide-react";
+import { ExternalLink, Github, X, ChevronRight, Sparkles, Lock, Code2, Server, Database, Cpu, Terminal, Globe } from "lucide-react";
 import Image from "next/image";
 
 // --- 1. FEATURED PROJECTS (Premium, Links wale) ---
@@ -41,12 +41,12 @@ const featuredProjects = [
   },
 ];
 
-// --- 2. DUMMY PROJECTS (No Links, Archive feel) ---
+// --- 2. DUMMY PROJECTS ---
 const otherProjects = [
   {
     title: "Chat-O-Sphere",
     category: "Real-time Messaging",
-    description: "A WebSocket-based chat application allowing users to create rooms and send instant messages. Optimized for low latency and high concurrency.",
+    description: "A WebSocket-based chat application allowing users to create rooms and send instant messages. Optimized for low latency.",
     tech: ["Socket.io", "React", "Node.js"],
   },
   {
@@ -69,7 +69,7 @@ const otherProjects = [
   },
 ];
 
-// --- 3D TILT CARD COMPONENT (For Featured) ---
+// --- 3D TILT CARD COMPONENT ---
 function TiltCard({ project, onClick }: { project: any; onClick: () => void }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -99,18 +99,17 @@ function TiltCard({ project, onClick }: { project: any; onClick: () => void }) {
       onClick={onClick}
       className="relative group cursor-pointer h-[420px] w-full rounded-[2rem] bg-zinc-900/40 border border-white/10 backdrop-blur-md perspective-1000 shadow-2xl"
     >
-      {/* Spotlight Effect */}
       <motion.div
         style={{
           background: useTransform(
             [mouseX, mouseY],
-            ([newX, newY]) =>
+            // 👇 FIX: Added ': any' type definition here to solve the Build Error
+            ([newX, newY]: any) =>
               `radial-gradient(600px circle at ${newX + 150}px ${newY + 200}px, rgba(255,255,255,0.08), transparent 40%)`
           ),
         }}
         className="absolute inset-0 rounded-[2rem] z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
       />
-
       <div className="relative h-full flex flex-col z-10 p-5 transform-gpu" style={{ transform: "translateZ(30px)" }}>
         <div className="relative h-52 w-full rounded-2xl overflow-hidden shadow-lg">
            <Image
@@ -124,7 +123,6 @@ function TiltCard({ project, onClick }: { project: any; onClick: () => void }) {
             {project.category}
           </div>
         </div>
-
         <div className="mt-6 flex flex-col flex-grow justify-between">
           <div>
             <h3 className="text-2xl font-bold text-white group-hover:text-purple-400 transition-colors duration-300 drop-shadow-md">
@@ -134,7 +132,6 @@ function TiltCard({ project, onClick }: { project: any; onClick: () => void }) {
               {project.description}
             </p>
           </div>
-          
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
             <div className="flex gap-2">
                 {project.tech.slice(0, 3).map((t: string, i: number) => (
@@ -179,7 +176,7 @@ export default function Projects() {
         </motion.h1>
       </div>
 
-      {/* --- SECTION 1: FEATURED (3D Cards) --- */}
+      {/* --- SECTION 1: FEATURED --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto relative z-10 px-2 mb-32">
         {featuredProjects.map((project) => (
           <TiltCard key={project.id} project={project} onClick={() => setSelectedId(project.id)} />
@@ -187,14 +184,13 @@ export default function Projects() {
       </div>
 
 
-      {/* --- SECTION 2: ARCHIVE (Dummy Projects) --- */}
+      {/* --- SECTION 2: ARCHIVE --- */}
       <div className="max-w-7xl mx-auto relative z-10 px-2 mb-32">
         <div className="flex items-center gap-4 mb-10">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent flex-grow"></div>
           <h2 className="text-2xl font-bold text-gray-400 uppercase tracking-widest">More Projects</h2>
           <div className="h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent flex-grow"></div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {otherProjects.map((project, index) => (
              <motion.div 
@@ -209,22 +205,15 @@ export default function Projects() {
                   <div className="p-3 bg-white/5 rounded-xl text-purple-400 group-hover:text-purple-300 group-hover:scale-110 transition-all">
                     <Code2 size={24} />
                   </div>
-                  <div className="flex gap-2">
-                    {/* Lock Icon showing no link */}
-                    <div className="p-2 text-gray-600 group-hover:text-gray-400 transition-colors" title="Source Private">
-                      <Lock size={18} />
-                    </div>
+                  <div className="p-2 text-gray-600 group-hover:text-gray-400 transition-colors" title="Source Private">
+                    <Lock size={18} />
                   </div>
                </div>
-               
                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">{project.title}</h3>
                <p className="text-sm text-gray-500 mb-6">{project.description}</p>
-               
                <div className="flex flex-wrap gap-2">
                  {project.tech.map((t, i) => (
-                   <span key={i} className="text-xs font-mono text-gray-400 px-2 py-1 bg-black/30 rounded-md border border-white/5">
-                     {t}
-                   </span>
+                   <span key={i} className="text-xs font-mono text-gray-400 px-2 py-1 bg-black/30 rounded-md border border-white/5">{t}</span>
                  ))}
                </div>
              </motion.div>
@@ -233,56 +222,75 @@ export default function Projects() {
       </div>
 
 
-      {/* --- SECTION 3: THEORY / PHILOSOPHY (Footer Area) --- */}
-      <div className="max-w-5xl mx-auto relative z-10 px-4">
-        <div className="bg-gradient-to-b from-zinc-900/40 to-black border border-white/10 rounded-[3rem] p-10 md:p-16 text-center relative overflow-hidden">
-           
-           {/* Decorative Background */}
-           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
-           <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/10 rounded-full blur-[80px] pointer-events-none"></div>
+      {/* --- SECTION 3: ENGINEERING PROFILE --- */}
+      <div className="max-w-7xl mx-auto relative z-10 px-2 mb-20">
+        <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+            {/* 1. Main Profile Card */}
+            <div className="lg:col-span-2 bg-gradient-to-br from-zinc-900 via-black to-zinc-900 border border-white/10 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] group-hover:bg-blue-600/20 transition-all duration-700"></div>
+                
+                <div className="relative z-10">
+                    <div className="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-gray-300 mb-6 uppercase tracking-wider">
+                        Engineering Core Team @ Vosyn
+                    </div>
+                    
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                        Architecting <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Next-Gen AI</span> <br /> Web Applications.
+                    </h2>
+                    
+                    <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-2xl">
+                        I specialize in building scalable, high-performance distributed systems. Currently engineering AI-driven solutions, I bridge the gap between complex backend logic (Node/Express/MongoDB) and stunning frontend interfaces.
+                    </p>
 
-           <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">My Development Philosophy</h2>
-           
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 mb-2">
-                  <Zap size={24} />
+                    <div className="flex flex-wrap gap-4 items-center text-sm font-medium text-gray-300">
+                        <span className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/5"><Terminal size={16} className="text-green-400"/> Final Year CSE '26</span>
+                        <span className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/5"><Globe size={16} className="text-blue-400"/> Open Source</span>
+                    </div>
                 </div>
-                <h3 className="text-xl font-bold text-white">Performance First</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  I prioritize optimized algorithms and efficient code structures to ensure applications run smoothly even under heavy loads.
-                </p>
-              </div>
+            </div>
 
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 mb-2">
-                  <Layout size={24} />
+            {/* 2. Tech Stack Bento Grid */}
+            <div className="flex flex-col gap-6">
+                
+                {/* Card A: Backend */}
+                <div className="flex-1 bg-zinc-900/30 border border-white/10 rounded-[2rem] p-8 flex flex-col justify-center relative overflow-hidden group hover:border-white/20 transition-all">
+                     <div className="absolute -right-10 -top-10 text-zinc-800 group-hover:text-zinc-700 transition-colors">
+                        <Server size={120} strokeWidth={1} />
+                     </div>
+                     <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Backend Architecture</h3>
+                     <p className="text-gray-400 text-sm mb-4 relative z-10">Scalable REST APIs & Database Design</p>
+                     <div className="flex gap-2 relative z-10">
+                        <span className="text-xs px-2 py-1 bg-green-900/30 text-green-400 rounded border border-green-500/20">Node.js</span>
+                        <span className="text-xs px-2 py-1 bg-gray-700/30 text-gray-300 rounded border border-gray-500/20">Express</span>
+                        <span className="text-xs px-2 py-1 bg-green-800/30 text-green-300 rounded border border-green-500/20">MongoDB</span>
+                     </div>
                 </div>
-                <h3 className="text-xl font-bold text-white">Pixel Perfect</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                   Aesthetics matter. I strive for clean, responsive, and accessible UI/UX that provides a seamless experience across all devices.
-                </p>
-              </div>
 
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 mb-2">
-                  <Cpu size={24} />
+                {/* Card B: Frontend */}
+                <div className="flex-1 bg-zinc-900/30 border border-white/10 rounded-[2rem] p-8 flex flex-col justify-center relative overflow-hidden group hover:border-white/20 transition-all">
+                     <div className="absolute -right-10 -bottom-10 text-zinc-800 group-hover:text-zinc-700 transition-colors">
+                        <Cpu size={120} strokeWidth={1} />
+                     </div>
+                     <h3 className="text-2xl font-bold text-white mb-2 relative z-10">Modern Frontend</h3>
+                     <p className="text-gray-400 text-sm mb-4 relative z-10">Pixel-perfect UI with Performance</p>
+                     <div className="flex gap-2 relative z-10">
+                        <span className="text-xs px-2 py-1 bg-blue-900/30 text-blue-400 rounded border border-blue-500/20">React</span>
+                        <span className="text-xs px-2 py-1 bg-black text-white rounded border border-white/20">Next.js</span>
+                        <span className="text-xs px-2 py-1 bg-purple-900/30 text-purple-400 rounded border border-purple-500/20">Framer</span>
+                     </div>
                 </div>
-                <h3 className="text-xl font-bold text-white">Scalable Architecture</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  Building with growth in mind. I write modular and maintainable code that allows easy feature expansion and team collaboration.
-                </p>
-              </div>
-           </div>
 
-           <div className="mt-12 pt-10 border-t border-white/10">
-              <p className="text-gray-500 italic">"Code is like humor. When you have to explain it, it’s bad."</p>
-           </div>
-        </div>
+            </div>
+        </motion.div>
       </div>
 
 
-      {/* --- POPUP MODAL (Only for Featured) --- */}
+      {/* --- POPUP MODAL --- */}
       <AnimatePresence>
         {selectedId && (
           <>
@@ -293,7 +301,6 @@ export default function Projects() {
               onClick={() => setSelectedId(null)}
               className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50"
             />
-
             <div className="fixed inset-0 flex items-center justify-center z-[51] p-4 pointer-events-none">
               {featuredProjects.map((project) => (
                 project.id === selectedId && (
@@ -309,12 +316,10 @@ export default function Projects() {
                             <X size={20} />
                         </button>
                     </div>
-
                     <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col overflow-y-auto bg-[#0a0a0a] relative">
                         <button onClick={(e) => { e.stopPropagation(); setSelectedId(null); }} className="absolute top-8 right-8 p-2 bg-white/5 hover:bg-white/20 rounded-full text-gray-400 hover:text-white transition-colors hidden md:block">
                             <X size={24} />
                         </button>
-
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                             <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-gradient-to-r ${project.color} bg-clip-text text-transparent border border-white/10`}>
                                 {project.category}
