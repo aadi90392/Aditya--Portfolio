@@ -2,13 +2,13 @@
 import { motion } from "framer-motion";
 import { 
   GraduationCap, Code2, Database, Wrench, Award, User, 
-  Download, Globe, Cpu, Server, CheckCircle, Terminal 
+  Download, Globe, Cpu, Server, CheckCircle, Terminal, BriefcaseIcon 
 } from "lucide-react";
 import Link from "next/link";
 
 export default function About() {
   
-  // Fake Certifications Data (Jo tumne manga tha)
+  // Certifications Data
   const certifications = [
     {
       title: "AWS Certified Cloud Practitioner",
@@ -66,7 +66,9 @@ export default function About() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white py-20 px-4 md:px-10 pb-32 relative overflow-hidden">
+    // FIX: Changed 'overflow-hidden' to 'overflow-x-hidden' to allow vertical scrolling
+    // FIX: Increased 'pb-32' to 'pb-56' so the last card is not hidden behind the Navbar
+    <div className="min-h-screen w-full bg-[#050505] text-white py-20 px-4 md:px-10 pb-56 relative overflow-x-hidden">
       
       {/* Background Grid */}
       <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:50px_50px] mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)"></div>
@@ -83,6 +85,28 @@ export default function About() {
         </h1>
       </motion.div>
 
+      {/* 2. Stats Section */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2 }}
+        className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 mb-20 relative z-10"
+      >
+        {[
+          { label: "Projects", value: "10+", icon: <Code2 size={20} className="text-blue-400" /> },
+          { label: "Experience", value: "1 Yr+", icon: <BriefcaseIcon /> },
+          { label: "CGPA", value: "7.5", icon: <GraduationCap size={20} className="text-green-400" /> },
+          { label: "Location", value: "Indore", icon: <Globe size={20} className="text-purple-400" /> },
+        ].map((stat, index) => (
+          <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-2xl text-center backdrop-blur-sm hover:bg-white/10 transition-colors">
+            <div className="flex justify-center mb-2">{stat.icon}</div>
+            <div className="text-2xl font-bold text-white">{stat.value}</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider">{stat.label}</div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Main Grid Content */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
         
         {/* ================= LEFT COLUMN (Bio & Education) ================= */}
@@ -90,10 +114,10 @@ export default function About() {
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="lg:col-span-1 space-y-6"
+          className="lg:col-span-1 flex flex-col gap-6"
         >
           {/* Bio Card */}
-          <div className="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl backdrop-blur-md h-full flex flex-col hover:border-white/20 transition-all shadow-xl">
+          <div className="bg-zinc-900/50 border border-white/10 p-8 rounded-3xl backdrop-blur-md flex flex-col hover:border-white/20 transition-all shadow-xl">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl text-white shadow-lg">
                 <User size={28} />
@@ -128,24 +152,25 @@ export default function About() {
                 <p className="text-xs text-gray-400 uppercase tracking-wider">Academic Background</p>
               </div>
             </div>
-            <div className="relative border-l-2 border-white/10 pl-6 ml-2 space-y-4">
+            <div className="relative border-l-2 border-white/10 pl-6 ml-2 space-y-6">
               
               {/* College */}
               <div className="relative">
                 <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-[#050505]"></div>
                 <div className="text-xl font-bold text-white">B.Tech in CSE</div>
-                <div className="text-sm text-gray-300">IPS Academy, Indore</div>
-                <div className="flex justify-between items-center mt-1">
-                  <span className="text-xs text-gray-500">2022 - 2026</span>
-                  <span className="text-xs font-bold text-green-400 bg-green-500/10 px-2 py-1 rounded">CGPA: 7.5</span>
+                <div className="text-sm text-gray-300 mb-1">IPS Academy, Indore</div>
+                <div className="flex flex-wrap gap-2 items-center">
+                  <span className="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">2022 - 2026</span>
+                  <span className="text-xs font-bold text-green-400 bg-green-500/10 px-2 py-1 rounded border border-green-500/20">CGPA: 7.5</span>
                 </div>
               </div>
 
-              {/* High School (Optional filler) */}
-              <div className="relative pt-4">
-                <div className="absolute -left-[31px] top-5 w-4 h-4 rounded-full bg-gray-600 border-4 border-[#050505]"></div>
+              {/* High School */}
+              <div className="relative">
+                <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-gray-600 border-4 border-[#050505]"></div>
                 <div className="text-lg font-bold text-gray-400">Higher Secondary</div>
-                <div className="text-sm text-gray-500">MP Board</div>
+                <div className="text-sm text-gray-500 mb-1">MP Board</div>
+                <span className="text-xs text-gray-600 bg-white/5 px-2 py-1 rounded">Completed</span>
               </div>
 
             </div>
@@ -185,7 +210,7 @@ export default function About() {
             ))}
           </div>
 
-          {/* 2. CERTIFICATIONS SECTION (The "Jayda Acha" Part) */}
+          {/* 2. CERTIFICATIONS SECTION */}
           <motion.div variants={itemVariants} className="pt-4">
             <div className="flex items-center gap-3 mb-6">
               <Award className="text-yellow-400" size={28} />
